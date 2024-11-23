@@ -1,0 +1,17 @@
+(main (
+	(print "hello world")
+))
+
+(main	(OutFile)
+	(print "hello world")
+)
+
+(main	(OutFile)
+		(out)
+		(
+			(out.print "hello world")
+		)
+)
+
+
+program := "(" "main" "(" ... ")" ")"
