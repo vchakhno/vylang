@@ -7,13 +7,34 @@ import (
 )
 
 type Symbole interface {
-	// ~Atom | ~SExpr
+	String() string
 }
 
-type Atom = string
+type Atom struct {
+	value string
+}
+
+func (a Atom) String() string {
+	return a.value;
+}
+
 
 type SExpr struct {
 	children []Symbole
+}
+
+func (s SExpr) String() string {
+	var storage strings.Builder;
+
+	storage.WriteString("(")
+	for i, str := range s.children {
+		storage.WriteString(str.String())
+		if (i != len(s.children) - 1) {
+			storage.WriteString(" ")
+		}
+	}
+	storage.WriteString(")")
+	return storage.String();
 }
 
 type Parser struct {
@@ -39,7 +60,7 @@ func (p *Parser) atom() (Atom) {
 		storage.WriteByte(char)
 		p.index++
 	}
-	return storage.String()
+	return Atom{storage.String()}
 }
 
 func (p *Parser) sexpr() (SExpr, error) {
@@ -103,6 +124,10 @@ func main() {
 	ast, err := parser.Parse()
 	if err != nil {
 		panic(err)
+	}
+
+	for _, str := range ast {
+		fmt.Println(str)
 	}
 	// print ast
 
